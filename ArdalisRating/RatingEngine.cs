@@ -11,30 +11,41 @@ namespace ArdalisRating
     /// </summary>
     public class RatingEngine
     {
-        public IRatingContext Context { get; set; } = new DefaultRatingContext();
+        private readonly ILogger _logger;
+        private readonly IPolicySource _policySource;
+        private readonly IPolicySerializer _policySerializer;
+        private readonly RaterFactory _raterFactory;
+
+        //public IRatingContext Context { get; set; } = new DefaultRatingContext();
         public decimal Rating { get; set; }
-        public RatingEngine()
+
+        //Dependency Inversion addition
+        public RatingEngine(ILogger logger, IPolicySource  policySource, IPolicySerializer policySerializer, RaterFactory raterFactory)
         {
-            Context.Engine = this;
+            //Context.Engine = this;
+            _logger = logger;
+            _policySource = policySource;
+            _policySerializer = policySerializer;
+            _raterFactory = raterFactory;
         }
         public void Rate()
         {
             //Logging - 1st refactor of S in Solid
-            Context.Log("Starting rate.");
-            Context.Log("Loading policy.");
+            _logger.Log("Starting rate.");
+            _logger.Log("Loading policy.");
 
             // load policy - open file policy.json
             //Policy source - 2nd refactor of S in Solid
             //string policyJson = PolicySource.GetPolicyFromSource();
 
             //Interface segragation change
-            string policyJson = Context.LoadPolicyFromFile();
+            string policyJson = _policySource.GetPolicyFromSource();
 
             //encoding format - 3rd refactor of S in Solid
             //var policy = PolicySerializer.GetPolicyFromJsonString(policyJson);
 
             //Interface segragation change
-            var policy = Context.GetPolicyFromJsonString(policyJson);
+            var policy = _policySerializer.GetPolicyFromString(policyJson);
 
             //Open/Closed Principle implementation
             //We created 3 classes each for one type insurance - auto,land,life - now it's easier to add more 
@@ -46,10 +57,10 @@ namespace ArdalisRating
             //var rater = factory.Create(policy, this);
 
             //Interface segragation change
-            var rater = Context.CreateRaterForPolicy(policy, Context);
+            var rater = _raterFactory.Create(policy);
 
-            rater.Rate(policy);
-            Context.Log("Rating completed.");
+            Rating = rater.Rate(policy);
+            _logger.Log("Rating completed.");
         }
     }
 }

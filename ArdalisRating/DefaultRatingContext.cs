@@ -4,38 +4,40 @@ using System.Text;
 
 namespace ArdalisRating
 {
-    public class DefaultRatingContext : IRatingContext
-    {
-        public RatingEngine Engine { get; set ; }
+    //Removed for dependency iversion principle
 
-        public Rater CreateRaterForPolicy(Policy policy, IRatingContext context)
-        {
-            return new RaterFactory().Create(policy, context);
-        }
+    //public class DefaultRatingContext : IRatingContext
+    //{
+    //    public RatingEngine Engine { get; set ; }
 
-        public Policy GetPolicyFromJsonString(string policyJson)
-        {
-            return new JsonPolicySerializer().GetPolicyFromJsonString(policyJson);
-        }
+    //    public Rater CreateRaterForPolicy(Policy policy, IRatingContext context)
+    //    {
+    //        return new RaterFactory().Create(policy, context);
+    //    }
 
-        public Policy GetPolicyFromXmlString(string policyXml)
-        {
-            throw new NotImplementedException();
-        }
+    //    public Policy GetPolicyFromJsonString(string policyJson)
+    //    {
+    //        return new JsonPolicySerializer().GetPolicyFromJsonString(policyJson);
+    //    }
 
-        public string LoadPolicyFromFile()
-        {
-            return new FilePolicySource().GetPolicyFromSource();
-        }
+    //    public Policy GetPolicyFromXmlString(string policyXml)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public string LoadPolicyFromURI(string uri)
-        {
-            throw new NotImplementedException();
-        }
+    //    public string LoadPolicyFromFile()
+    //    {
+    //        return new FilePolicySource().GetPolicyFromSource();
+    //    }
 
-        public void Log(string message)
-        {
-            new ConsoleLogger().Log(message);
-        }
-    }
+    //    public string LoadPolicyFromURI(string uri)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public void Log(string message)
+    //    {
+    //        new ConsoleLogger().Log(message);
+    //    }
+    //}
 }

@@ -7,8 +7,13 @@ namespace ArdalisRating
     //This class is an implementation of Factory Pattern
     public class RaterFactory
     {
+        private readonly ILogger _logger;
+        public RaterFactory(ILogger logger)
+        {
+            _logger = logger;
+        }
         //public Rater Create(Policy policy, RatingEngine engine)
-        public Rater Create(Policy policy, IRatingContext context)
+        public Rater Create(Policy policy)
         {
             //Method 1 of OCP - Without reflection
             //switch (policy.Type)
@@ -31,15 +36,16 @@ namespace ArdalisRating
             //}
 
             //Method 2 of OCP - With reflection
+            //Dependency inversion too
             try
             {
                 return (Rater)Activator.CreateInstance(
                     Type.GetType($"ArdalisRating.{policy.Type}PolicyRater"),
-                        new object[] { new RatingUpdater(context.Engine) });
+                        new object[] { _logger });
             }
             catch
             {
-                return new UnknownPolicyRater(new RatingUpdater(context.Engine));
+                return new UnknownPolicyRater(_logger);
             }
         }
     }

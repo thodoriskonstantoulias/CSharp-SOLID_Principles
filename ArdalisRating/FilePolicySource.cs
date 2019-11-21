@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ArdalisRating
 {
-    public class FilePolicySource
+    public class FilePolicySource : IPolicySource
     {
         public string GetPolicyFromSource()
         {

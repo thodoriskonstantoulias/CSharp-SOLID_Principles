@@ -12,14 +12,14 @@
         //}
 
         //Interface segragation change 
-        protected readonly IRatingUpdater _ratingUpdater;
-        public ILogger Logger { get; set; } = new ConsoleLogger();
+        //protected readonly IRatingUpdater _ratingUpdater;
+        public ILogger Logger { get; set; } 
 
-        public Rater(IRatingUpdater ratingUpdater)
+        public Rater(ILogger logger)
         {
-            _ratingUpdater = ratingUpdater;
+            Logger = logger;
         }
 
-        public abstract void Rate(Policy policy);
+        public abstract decimal Rate(Policy policy);
     }
 }

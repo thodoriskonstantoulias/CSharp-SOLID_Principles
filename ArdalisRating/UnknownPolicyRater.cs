@@ -12,12 +12,12 @@ namespace ArdalisRating
         //}
 
         //Interface segragation change 
-        public UnknownPolicyRater(IRatingUpdater ratingUpdater)
-            : base(ratingUpdater) { }
+        public UnknownPolicyRater(ILogger logger) : base(logger) { }
 
-        public override void Rate(Policy policy)
+        public override decimal Rate(Policy policy)
         {
             Logger.Log("Unknown policy type");
+            return 0m;
         }
     }
 }
