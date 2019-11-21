@@ -11,22 +11,30 @@ namespace ArdalisRating
     /// </summary>
     public class RatingEngine
     {
-        public ConsoleLogger Logger { get; set; } = new ConsoleLogger();
-        public FilePolicySource PolicySource { get; set; } = new FilePolicySource();
-        public JsonPolicySerializer PolicySerializer { get; set; } = new JsonPolicySerializer();
+        public IRatingContext Context { get; set; } = new DefaultRatingContext();
         public decimal Rating { get; set; }
+        public RatingEngine()
+        {
+            Context.Engine = this;
+        }
         public void Rate()
         {
             //Logging - 1st refactor of S in Solid
-            Logger.Log("Starting rate.");
-            Logger.Log("Loading policy.");
+            Context.Log("Starting rate.");
+            Context.Log("Loading policy.");
 
             // load policy - open file policy.json
             //Policy source - 2nd refactor of S in Solid
-            string policyJson = PolicySource.GetPolicyFromSource();
+            //string policyJson = PolicySource.GetPolicyFromSource();
+
+            //Interface segragation change
+            string policyJson = Context.LoadPolicyFromFile();
 
             //encoding format - 3rd refactor of S in Solid
-            var policy = PolicySerializer.GetPolicyFromJsonString(policyJson);
+            //var policy = PolicySerializer.GetPolicyFromJsonString(policyJson);
+
+            //Interface segragation change
+            var policy = Context.GetPolicyFromJsonString(policyJson);
 
             //Open/Closed Principle implementation
             //We created 3 classes each for one type insurance - auto,land,life - now it's easier to add more 
@@ -34,10 +42,14 @@ namespace ArdalisRating
             //With the factory method we return the correct instance each time
             //We create a flood policy to check the extensibility of the principle
 
-            var factory = new RaterFactory();
-            var rater = factory.Create(policy, this);
+            //var factory = new RaterFactory();
+            //var rater = factory.Create(policy, this);
+
+            //Interface segragation change
+            var rater = Context.CreateRaterForPolicy(policy, Context);
+
             rater.Rate(policy);
-            Logger.Log("Rating completed.");
+            Context.Log("Rating completed.");
         }
     }
 }
