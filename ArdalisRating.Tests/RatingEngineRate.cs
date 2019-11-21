@@ -5,6 +5,7 @@ using Xunit;
 
 namespace ArdalisRating.Tests
 {
+    //Test need changes - You can use fake repositories of your choice to run them
     public class RatingEngineRate
     {
 [Fact]
@@ -18,8 +19,8 @@ public void ReturnsRatingOf10000For200000LandPolicy()
     };
     string json = JsonConvert.SerializeObject(policy);
     File.WriteAllText("policy.json", json);
-
-    var engine = new RatingEngine();
+    var logger = new ConsoleLogger();
+    var engine = new RatingEngine(new ConsoleLogger(), new FilePolicySource(), new JsonPolicySerializer(), new RaterFactory(logger));
     engine.Rate();
     var result = engine.Rating;
 
@@ -37,8 +38,8 @@ public void ReturnsRatingOf10000For200000LandPolicy()
             };
             string json = JsonConvert.SerializeObject(policy);
             File.WriteAllText("policy.json", json);
-
-            var engine = new RatingEngine();
+            var logger = new ConsoleLogger();
+            var engine = new RatingEngine(new ConsoleLogger(), new FilePolicySource(), new JsonPolicySerializer(), new RaterFactory(logger));
             engine.Rate();
             var result = engine.Rating;
 

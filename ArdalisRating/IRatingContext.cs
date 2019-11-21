@@ -4,6 +4,7 @@ using System.Text;
 
 namespace ArdalisRating
 {
+    //Removed for dependency iversion principle
     public interface IRatingContext : ILogger
     {
         string LoadPolicyFromFile();

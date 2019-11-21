@@ -12,7 +12,7 @@ namespace ArdalisRating.Tests
         {
             var inputJson = "{}";
             var serializer = new JsonPolicySerializer();
-            var result = serializer.GetPolicyFromJsonString(inputJson);
+            var result = serializer.GetPolicyFromString(inputJson);
             var policy = new Policy();
             AssertPoliciesEqual(policy, result);
         }
